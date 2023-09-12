@@ -1,11 +1,10 @@
-import Tile from './Tile';
+import Tile from "./Tile";
 
 interface BoardProps {
   board: number[];
 }
 
 const Board: React.FC<BoardProps> = ({ board }) => {
-  
   return (
     <div className="flex justify-center items-center">
       <div className="w-[48vw] h-[48vw] max-w-[56vh] max-h-[56vh]">
