@@ -56,32 +56,30 @@ export const useGameLogic = () => {
 
 
 
-      const isMoveAvailable = (grid: Grid):boolean => {
-                //zero check
-          for (let row = 0; row < 4; row++) {
-            for (let col = 0; col < 4; col++) {
-              if (grid[row][col] === 0) return true;
-            }
-          }
-
-          //horizontal move check
-          for (let row = 0; row < 4; row++) {
-            for (let col = 0; col < 3; col++) { 
-              if (grid[row][col] === grid[row][col + 1]) return true;
-            }
-          }
-
-          // vertical move check
+      const isMoveAvailable = (grid: Grid): boolean => {
+        // zero check
+        for (let row = 0; row < 4; row++) {
           for (let col = 0; col < 4; col++) {
-            for (let row = 0; row < 3; row++) { 
-              if (grid[row][col] === grid[row + 1][col]) return true;
-            }
+            if (grid[row][col] === 0) return true;
           }
-
-          return false
-                
-
-        };
+        }
+        // horizontal check
+        for (let row = 0; row < 4; row++) {
+          for (let col = 0; col < 3; col++) {
+            if (grid[row][col] === grid[row][col + 1]) return true;
+          }
+        }
+      
+        // vertical check
+        for (let col = 0; col < 4; col++) {
+          for (let row = 0; row < 3; row++) {
+            if (grid[row][col] === grid[row + 1][col]) return true;
+          }
+        }
+      
+        return false;
+      };
+      
   
 
 
