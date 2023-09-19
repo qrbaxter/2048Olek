@@ -1,9 +1,12 @@
 import { Grid, Board as BoardType, Direction } from "@/types";
 import { useGameLogic } from "./useGameLogic";
+import { useState } from "react";
 
 
-export const useGameControls = (board: number[], setBoard: Function, setScore: Function, setGameOver: Function) => {
+export const useGameControls = (board: number[], setBoard: Function, setScore: Function) => {
     const {move, isMoveAvailable} = useGameLogic()
+    const [gameOver, setGameOver] = useState<boolean>(false);
+    
     
     const handleKeyDown = (event: KeyboardEvent): void => {
       let direction: Direction | undefined = undefined;
@@ -45,20 +48,21 @@ export const useGameControls = (board: number[], setBoard: Function, setScore: F
             if(value === 0) acc.push(index);
             return acc;
           }, [] as number[]);
-      
-          let isGameOver: boolean = !isMoveAvailable(newGrid);
-          if (emptyCells.length === 0 || isGameOver) {
-            setGameOver(true);
-        } else {
-            let randomCell: number = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-            let randomNumber: number = Math.random() < 0.9 ? 2 : 4; 
-            flatNewGrid[randomCell] = randomNumber;
-            setBoard(flatNewGrid);
-            setGameOver(false);
-        }
-        
-        }
-      };
-      return {handleKeyDown}
-      
+
+          let randomCell: number = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+          let randomNumber: number = Math.random() < 0.9 ? 2 : 4; 
+          flatNewGrid[randomCell] = randomNumber;
+          setBoard(flatNewGrid);
+
+          let isGameOver: boolean = isMoveAvailable(newGrid)===false
+            if (isGameOver) {
+              setGameOver(true);
+          
+  }
+  console.log(newGrid);
+  console.log(isMoveAvailable(newGrid));
 }
+    }
+    return {handleKeyDown, gameOver, setGameOver}
+  }
+      

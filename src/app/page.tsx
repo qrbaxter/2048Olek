@@ -7,7 +7,7 @@ import Header from "../components/Header";
 import NewGame from "../components/NewGame";
 import { BOARD_SIZE } from '@/constants';
 import { useGameControls } from '@/hooks/useGameControls';
-import { useGameLogic } from '@/hooks/useGameLogic';
+import { Tile } from '@/types';
 
 const initializeBoard = () => {
   let newBoard = Array.from({ length: BOARD_SIZE }, () => 0);
@@ -24,13 +24,9 @@ const initializeBoard = () => {
 export default function Home() {
   const [board, setBoard] = useState<number[]>(Array.from({ length: BOARD_SIZE }, () => 0));
   const [score, setScore] = useState<number>(0);
-  const [gameOver, setGameOver] = useState<boolean>(false);
-  const { handleKeyDown } = useGameControls(board, setBoard, setScore, setGameOver);
-  const { move, isMoveAvailable } = useGameLogic()
-
-  useEffect(() => {
-    setBoard(initializeBoard());
-  }, []); 
+  const {handleKeyDown, gameOver, setGameOver} = useGameControls(board, setBoard, setScore)
+  
+  
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -38,6 +34,8 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleKeyDown]);
+
+
   
   
 const handleNewGame = () => {
@@ -46,6 +44,9 @@ const handleNewGame = () => {
   setScore(0)
 };
 
+useEffect(() => {
+  gameOver ? setGameOver(true) : setBoard(initializeBoard());
+}, [gameOver, setGameOver]); 
 
   return (
   <main>
