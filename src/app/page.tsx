@@ -1,52 +1,16 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Board from "../components/Board";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import NewGame from "../components/NewGame";
-import { BOARD_SIZE } from '@/constants';
 import { useGameControls } from '@/hooks/useGameControls';
-import { Tile } from '@/types';
-
-const initializeBoard = () => {
-  let newBoard = Array.from({ length: BOARD_SIZE }, () => 0);
-  let index1 = Math.floor(Math.random() * BOARD_SIZE);
-  let index2 = Math.floor(Math.random() * BOARD_SIZE);
-  
-  newBoard[index1] = (Math.random() > 0.5 ? 2 : 4);
-  newBoard[index2] = (Math.random() > 0.5 ? 2 : 4);
-  return newBoard;
-}
 
 
 
 export default function Home() {
-  const [board, setBoard] = useState<number[]>(Array.from({ length: BOARD_SIZE }, () => 0));
-  const [score, setScore] = useState<number>(0);
-  const {handleKeyDown, gameOver, setGameOver} = useGameControls(board, setBoard, setScore)
-  
-  
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [handleKeyDown]);
-
-
-  
-  
-const handleNewGame = () => {
-  setBoard(initializeBoard());
-  setGameOver(false);  
-  setScore(0)
-};
-
-useEffect(() => {
-  gameOver ? setGameOver(true) : setBoard(initializeBoard());
-}, [gameOver, setGameOver]); 
+  const { board, gameOver, handleNewGame, score } = useGameControls()
 
   return (
   <main>
