@@ -1,4 +1,3 @@
-
 import { slideArray, combineArray } from '@/utils/array.helpers';
 import { Grid, Direction } from '@/types';
 
@@ -83,15 +82,7 @@ export const useGameLogic = () => {
                 
 
         };
-  
-
-
-
-
-
 
       return {move, isMoveAvailable}
       
 }
-
-

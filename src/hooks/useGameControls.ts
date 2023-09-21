@@ -1,4 +1,3 @@
-
 import { Grid, Board as BoardType, Direction } from "@/types";
 import { useGameLogic } from "./useGameLogic";
 import { useState, useEffect, useCallback } from "react";
@@ -26,6 +25,7 @@ function chunk<T>(array: T[], size: number): T[][] {
 
 
 export const useGameControls = () => {
+    const [bestScore, setBestScore] = useState<number>(0);
     const {move, isMoveAvailable} = useGameLogic();
     const [gameOver, setGameOver] = useState<boolean>(false);
     const [board, setBoard] = useState<number[]>(Array.from({ length: BOARD_SIZE }, () => 0));
@@ -64,6 +64,10 @@ export const useGameControls = () => {
         }
     
         setScore((prevScore: number) => prevScore + moveResult.totalScore);
+        if(score > bestScore) {
+          setBestScore(score);
+          localStorage.setItem('bestScore', JSON.stringify(score));
+        }
         
         let flatNewGrid: BoardType = newGrid.flat();
         let emptyCells: number[] = flatNewGrid.reduce((acc, value, index) => {
@@ -85,12 +89,17 @@ export const useGameControls = () => {
         console.log(newGrid);
         console.log(isMoveAvailable(newGrid));
       }
-    }, [board, move, isMoveAvailable]);
+    }, [board, move, isMoveAvailable, bestScore, score]);
 
     const handleNewGame = () => {
       setBoard(initializeBoard());
       setGameOver(false);  
       setScore(0);
+    
+      const storedBestScore = localStorage.getItem('bestScore');
+      if(storedBestScore) {
+        setBestScore(JSON.parse(storedBestScore));
+      }
     };
 
     useEffect(() => {
@@ -104,5 +113,6 @@ export const useGameControls = () => {
       setBoard(initializeBoard());
     }, [gameOver]);
   
-    return {handleKeyDown, gameOver, setGameOver, handleNewGame, board, score}
+    return {handleKeyDown, gameOver, setGameOver, handleNewGame, board, score, bestScore};
+
 }
