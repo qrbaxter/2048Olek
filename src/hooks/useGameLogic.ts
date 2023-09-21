@@ -1,3 +1,4 @@
+
 import { slideArray, combineArray } from '@/utils/array.helpers';
 import { Grid, Direction } from '@/types';
 
@@ -56,30 +57,32 @@ export const useGameLogic = () => {
 
 
 
-      const isMoveAvailable = (grid: Grid): boolean => {
-        // zero check
-        for (let row = 0; row < 4; row++) {
+      const isMoveAvailable = (grid: Grid):boolean => {
+          //zero check
+          for (let row = 0; row < 4; row++) {
+            for (let col = 0; col < 4; col++) {
+              if (grid[row][col] === 0) return true;
+            }
+          }
+
+          //horizontal move check
+          for (let row = 0; row < 4; row++) {
+            for (let col = 0; col < 3; col++) { 
+              if (grid[row][col] === grid[row][col + 1]) return true;
+            }
+          }
+
+          // vertical move check
           for (let col = 0; col < 4; col++) {
-            if (grid[row][col] === 0) return true;
+            for (let row = 0; row < 3; row++) { 
+              if (grid[row][col] === grid[row + 1][col]) return true;
+            }
           }
-        }
-        // horizontal check
-        for (let row = 0; row < 4; row++) {
-          for (let col = 0; col < 3; col++) {
-            if (grid[row][col] === grid[row][col + 1]) return true;
-          }
-        }
-      
-        // vertical check
-        for (let col = 0; col < 4; col++) {
-          for (let row = 0; row < 3; row++) {
-            if (grid[row][col] === grid[row + 1][col]) return true;
-          }
-        }
-      
-        return false;
-      };
-      
+
+          return false
+                
+
+        };
   
 
 
@@ -90,3 +93,5 @@ export const useGameLogic = () => {
       return {move, isMoveAvailable}
       
 }
+
+

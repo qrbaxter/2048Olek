@@ -1,3 +1,4 @@
+
 import { Grid, Board as BoardType, Direction } from "@/types";
 import { useGameLogic } from "./useGameLogic";
 import { useState, useEffect, useCallback } from "react";
@@ -12,6 +13,17 @@ const initializeBoard = () => {
   newBoard[index2] = (Math.random() > 0.5 ? 2 : 4);
   return newBoard;
 }
+
+function chunk<T>(array: T[], size: number): T[][] {
+  const chunked: T[][] = [];
+  let index = 0;
+  while (index < array.length) {
+      chunked.push(array.slice(index, size + index));
+      index += size;
+  }
+  return chunked;
+}
+
 
 export const useGameControls = () => {
     const {move, isMoveAvailable} = useGameLogic();
@@ -62,9 +74,10 @@ export const useGameControls = () => {
         let randomCell: number = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         let randomNumber: number = Math.random() < 0.9 ? 2 : 4; 
         flatNewGrid[randomCell] = randomNumber;
+        newGrid = chunk(flatNewGrid, 4);
         setBoard(flatNewGrid);
 
-        let isGameOver: boolean = !isMoveAvailable(newGrid);
+        let isGameOver: boolean = !isMoveAvailable(chunk(flatNewGrid, 4));
         if (isGameOver) {
           setGameOver(true);   
         }
