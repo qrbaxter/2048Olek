@@ -1,5 +1,5 @@
 import Tile from './Tile';
-
+import { nanoid } from 'nanoid';
 interface BoardProps {
   board: number[];
 }
@@ -16,7 +16,7 @@ const Board: React.FC<BoardProps> = ({ board }) => {
           }}
         >
           {board.map((value, i) => (
-            <Tile value={value} key={i} />
+            <Tile value={value} key={i} id={nanoid()} />
           ))}
         </div>
       </div>

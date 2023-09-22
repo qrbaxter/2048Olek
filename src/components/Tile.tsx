@@ -2,6 +2,7 @@ import React from 'react';
 
 export interface TileProps {
   value: number;
+  id: string;
 }
 
 const colorMap: { [key: number]: string } = {
@@ -19,7 +20,7 @@ const colorMap: { [key: number]: string } = {
 };
 
 
-const Tile: React.FC<TileProps> = ({ value }) => {
+const Tile: React.FC<TileProps> = ({ value, id }) => {
   const backgroundColor = colorMap[value] || '#8A9A5B';
   return (
     <div style={{backgroundColor}} className={`border border-black aspect-w-1 aspect-h-1 flex items-center justify-center`}>
