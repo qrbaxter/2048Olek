@@ -13,7 +13,19 @@ const initializeBoard = () => {
   return newBoard;
 }
 
+function chunk<T>(array: T[], size: number): T[][] {
+  const chunked: T[][] = [];
+  let index = 0;
+  while (index < array.length) {
+      chunked.push(array.slice(index, size + index));
+      index += size;
+  }
+  return chunked;
+}
+
+
 export const useGameControls = () => {
+    const [bestScore, setBestScore] = useState<number>(0);
     const {move, isMoveAvailable} = useGameLogic();
     const [gameOver, setGameOver] = useState<boolean>(false);
     const [board, setBoard] = useState<number[]>(Array.from({ length: BOARD_SIZE }, () => 0));
@@ -52,6 +64,10 @@ export const useGameControls = () => {
         }
     
         setScore((prevScore: number) => prevScore + moveResult.totalScore);
+        if(score > bestScore) {
+          setBestScore(score);
+          localStorage.setItem('bestScore', JSON.stringify(score));
+        }
         
         let flatNewGrid: BoardType = newGrid.flat();
         let emptyCells: number[] = flatNewGrid.reduce((acc, value, index) => {
@@ -62,9 +78,10 @@ export const useGameControls = () => {
         let randomCell: number = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         let randomNumber: number = Math.random() < 0.9 ? 2 : 4; 
         flatNewGrid[randomCell] = randomNumber;
+        newGrid = chunk(flatNewGrid, 4);
         setBoard(flatNewGrid);
 
-        let isGameOver: boolean = !isMoveAvailable(newGrid);
+        let isGameOver: boolean = !isMoveAvailable(chunk(flatNewGrid, 4));
         if (isGameOver) {
           setGameOver(true);   
         }
@@ -72,12 +89,17 @@ export const useGameControls = () => {
         console.log(newGrid);
         console.log(isMoveAvailable(newGrid));
       }
-    }, [board, move, isMoveAvailable]);
+    }, [board, move, isMoveAvailable, bestScore, score]);
 
     const handleNewGame = () => {
       setBoard(initializeBoard());
       setGameOver(false);  
       setScore(0);
+    
+      const storedBestScore = localStorage.getItem('bestScore');
+      if(storedBestScore) {
+        setBestScore(JSON.parse(storedBestScore));
+      }
     };
 
     useEffect(() => {
@@ -91,5 +113,6 @@ export const useGameControls = () => {
       setBoard(initializeBoard());
     }, [gameOver]);
   
-    return {handleKeyDown, gameOver, setGameOver, handleNewGame, board, score}
+    return {handleKeyDown, gameOver, setGameOver, handleNewGame, board, score, bestScore};
+
 }

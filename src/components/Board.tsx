@@ -1,10 +1,11 @@
-import Tile from "./Tile";
-
+import Tile from './Tile';
+import { nanoid } from 'nanoid';
 interface BoardProps {
   board: number[];
 }
 
 const Board: React.FC<BoardProps> = ({ board }) => {
+  
   return (
     <div className="flex justify-center items-center">
       <div className="w-[48vw] h-[48vw] max-w-[56vh] max-h-[56vh]">
@@ -15,7 +16,7 @@ const Board: React.FC<BoardProps> = ({ board }) => {
           }}
         >
           {board.map((value, i) => (
-            <Tile value={value} key={i} />
+            <Tile value={value} key={i} id={nanoid()} />
           ))}
         </div>
       </div>
